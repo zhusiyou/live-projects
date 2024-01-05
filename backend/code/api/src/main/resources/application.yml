@@ -74,7 +74,7 @@ spring:
 
 #mybatis plus 设置
 mybatis-plus:
-  type-aliases-package: live.betterman..model
+#  type-aliases-package: live.betterman.system.model
   mapper-locations: classpath*:live/betterman/**/*Mapper.xml
   global-config:
     # 关闭MP3.0自带的banner

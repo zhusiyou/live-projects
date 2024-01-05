@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description:
  */
 @SpringBootApplication
-@MapperScan("live.betterman.**.dao")
+@MapperScan(basePackages = "live.betterman.**.dao")
 public class ApiApplication {
     public static void main(String[] args){
         SpringApplication.run(ApiApplication.class);
