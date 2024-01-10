@@ -43,6 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutSuccessUrl("/test/")
         ;
+//        // 配置异常处理器
+//        http
+//                .exceptionHandling()
+//                // 认证 时的异常（当用户请求一个受保护的资源，又没登录时触发）
+//                .authenticationEntryPoint(myAuthenticationEntryPoint())
+//                // 用户访问无权限资源 时的异常（用户登录后，请求一个受保护的资源，又没权限时触发）
+//                .accessDeniedHandler(myAccessDeniedHandler());
+
         http.addFilterBefore(getMobileCodeFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -68,4 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager getAuthenticationManager() throws Exception {
         return super.authenticationManagerBean();
     }
+
+//    @Bean
+//    public MyAccessDeniedHandler myAccessDeniedHandler(){
+//        return new MyAccessDeniedHandler();
+//    }
+//    @Bean
+//    public MyAuthenticationEntryPoint myAuthenticationEntryPoint(){
+//        return new MyAuthenticationEntryPoint();
+//    }
 }

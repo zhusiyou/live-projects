@@ -1,5 +1,6 @@
 package live.betterman.api.config.security;
 
+import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,7 +23,7 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Map<String, Object> result = new HashMap<>();
         result.put("message", "登录成功");
-        result.put("code", 200);
+        result.put("code", HttpStatus.HTTP_OK);
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().println(JSON.toJSONString(result));
