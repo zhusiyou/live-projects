@@ -16,7 +16,7 @@ public class MybatisGenerator {
         AutoGenerator mpg = new AutoGenerator(dsc);
 
         String[] tableNames = new String[]{
-                "sys_menu","sys_role","sys_role_menu","sys_user","sys_user_role"
+                "sys_permission","sys_role_permission"
         };
         String moduleName = "system";
         String projectPath = "D:\\developer\\live-projects\\backend\\code";

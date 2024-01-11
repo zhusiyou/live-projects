@@ -1,6 +1,7 @@
 package live.betterman.system.service.impl;
 
 import live.betterman.system.dao.SysUserMapper;
+import live.betterman.system.model.SysPermission;
 import live.betterman.system.model.SysRole;
 import live.betterman.system.model.SysUser;
 import live.betterman.system.service.MyUserDetailService;
@@ -26,22 +27,18 @@ public class MyUserDetailServiceImpl implements MyUserDetailService, UserDetails
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = userMapper.loadByUsername(username);
+
         List<SysRole> roles = userMapper.getRolesByUserId(sysUser.getUserId());
         sysUser.setRoles(roles);
+
+        List<SysPermission> permissions = userMapper.getPermissionsByUserId(sysUser.getUserId());
+        sysUser.setPermissions(permissions);
+
         return sysUser;
     }
 
     @Override
     public UserDetails loadUserByMobile(String mobile){
-        SysUser sysUser = new SysUser();
-        sysUser.setUserId("1");
-        sysUser.setUserName(mobile);
-
-        SysRole sysRole = new SysRole();
-        sysRole.setRoleId("role_1");
-        sysRole.setRoleName("admin");
-        sysUser.setRoles(Arrays.asList(sysRole));
-
-        return sysUser;
+        return loadUserByUsername("haha");
     }
 }

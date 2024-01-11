@@ -2,6 +2,7 @@ package live.betterman.system.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author zhudawei
@@ -25,8 +26,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SysUser implements UserDetails, Serializable {
-
-
     @TableId("user_id")
     private String userId;
 
@@ -34,12 +33,21 @@ public class SysUser implements UserDetails, Serializable {
     private String userName;
 
     private String password;
-    private List<SysRole> roles = new ArrayList<>();
 
+    @TableField(exist = false)
+    private List<SysRole> roles = new ArrayList<>();
+    @TableField(exist = false)
+    private List<SysPermission> permissions = new ArrayList<>();
+
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return roles.stream().map(item-> new SimpleGrantedAuthority(item.getRoleName()))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(item-> new SimpleGrantedAuthority(item.getRoleName()))
+        return permissions.stream().map(item -> new SimpleGrantedAuthority(item.getPermissionName()))
                 .collect(Collectors.toList());
     }
 
