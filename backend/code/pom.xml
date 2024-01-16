@@ -9,6 +9,7 @@
     <modules>
         <module>system</module>
         <module>api</module>
+        <module>common</module>
     </modules>
     <name>iCode</name>
     <description>Demo project for Spring Boot</description>
