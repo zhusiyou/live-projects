@@ -32,7 +32,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         Map<String, Object> result = new HashMap<>();
         result.put("message", "登录成功");
         result.put("code", HttpStatus.HTTP_OK);
-        result.put("token", token);
+        result.put("data", token);
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().println(JSON.toJSONString(result));

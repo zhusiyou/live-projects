@@ -1,15 +1,14 @@
 package live.betterman.api.controller;
 
 import io.swagger.annotations.Api;
+import live.betterman.common.model.Result;
 import live.betterman.system.model.SysUser;
 import live.betterman.system.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,5 +54,16 @@ public class UserController {
             System.out.println("权限：" + authentication.getAuthorities());
         }).start();
         return "haha security";
+    }
+
+    @PostMapping("/add")
+    public Result<Boolean> addUser(@RequestBody SysUser user){
+        boolean result = sysUserService.saveOrUpdate(user);
+        return Result.success(result);
+    }
+    @PostMapping("/edit")
+    public Result<Boolean> editUser(@RequestBody SysUser user){
+        boolean result = sysUserService.saveOrUpdate(user);
+        return Result.success(result);
     }
 }

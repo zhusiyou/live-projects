@@ -5,6 +5,7 @@ import live.betterman.system.service.SysPermissionService;
 import live.betterman.system.service.impl.MyUserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,6 +45,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 //将自定义provider加入providerManager
                 .authenticationProvider(mobileCodeAuthenticationProvider)
                 .authorizeHttpRequests()
+                // http 预检
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 配置的白名单仅仅是让Security框架忽略对指定路径的权限校验,并不代表配置了白名单之后指定路径就不走过滤链了
                 .mvcMatchers("/test/**").permitAll()
                 .anyRequest().authenticated()
@@ -54,6 +57,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 //                .failureHandler(new MyAuthenticationFailureHandler())
 //                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().cors()
                 .and().csrf().disable()
                 .logout()
                 .logoutUrl("/logout")
