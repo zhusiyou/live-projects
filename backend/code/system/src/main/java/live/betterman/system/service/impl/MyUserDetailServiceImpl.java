@@ -28,6 +28,10 @@ public class MyUserDetailServiceImpl implements MyUserDetailService, UserDetails
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = userMapper.loadByUsername(username);
 
+        if(sysUser == null){
+            throw new UsernameNotFoundException("用户不存在");
+        }
+
         List<SysRole> roles = userMapper.getRolesByUserId(sysUser.getUserId());
         sysUser.setRoles(roles);
 

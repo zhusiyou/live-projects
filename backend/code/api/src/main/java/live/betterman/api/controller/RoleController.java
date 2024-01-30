@@ -6,10 +6,9 @@ import live.betterman.system.model.SysRole;
 import live.betterman.system.model.SysUser;
 import live.betterman.system.service.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author: zhudawei
@@ -24,13 +23,20 @@ public class RoleController {
     private SysRoleService roleService;
 
     @PostMapping("/add")
-    public Result<Boolean> addUser(@RequestBody SysRole role){
+    public Result<Boolean> addUser(@RequestBody SysRole role) {
         boolean result = roleService.saveOrUpdate(role);
         return Result.success(result);
     }
+
     @PostMapping("/edit")
-    public Result<Boolean> editUser(@RequestBody SysRole role){
+    public Result<Boolean> editUser(@RequestBody SysRole role) {
         boolean result = roleService.saveOrUpdate(role);
         return Result.success(result);
+    }
+
+    @GetMapping("/list")
+    public Result<List<SysRole>> list() {
+        List<SysRole> list = roleService.list();
+        return Result.success(list);
     }
 }

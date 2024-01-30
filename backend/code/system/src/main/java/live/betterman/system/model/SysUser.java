@@ -29,8 +29,7 @@ public class SysUser implements UserDetails, Serializable {
     @TableId("user_id")
     private String userId;
 
-    @TableField("user_name")
-    private String userName;
+    private String username;
 
     private String password;
 
@@ -53,7 +52,7 @@ public class SysUser implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

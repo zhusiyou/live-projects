@@ -15,4 +15,5 @@ import java.util.List;
  */
 public interface SysUserRoleService extends IService<SysUserRole> {
     boolean save(String userId, List<String> roleIds);
+    List<SysUserRole> getByUserId(String userId);
 }

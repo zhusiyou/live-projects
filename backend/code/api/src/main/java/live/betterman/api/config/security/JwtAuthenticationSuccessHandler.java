@@ -25,7 +25,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         SysUser principal = (SysUser) authentication.getPrincipal();
         SysUser sysUser = new SysUser();
         sysUser.setUserId(principal.getUserId());
-        sysUser.setUserName(principal.getUsername());
+        sysUser.setUsername(principal.getUsername());
         sysUser.setPermissions(principal.getPermissions());
         String token = JwtUtils.generateToken(sysUser.getUsername(), sysUser);
 

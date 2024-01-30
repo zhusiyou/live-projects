@@ -7,10 +7,7 @@ import live.betterman.system.model.SysUserRole;
 import live.betterman.system.service.SysRoleService;
 import live.betterman.system.service.SysUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -35,8 +32,13 @@ public class UserRoleController {
 //    }
 
     @PostMapping("/user/{userId}")
-    public Result<Boolean> edit(@RequestBody List<String> roleIds, @PathParam("userId") String userId){
+    public Result<Boolean> edit(@RequestBody List<String> roleIds, @PathVariable("userId") String userId){
         boolean result = userRoleService.save(userId, roleIds);
         return Result.success(result);
+    }
+
+    @GetMapping("/user/{userId}")
+    public Result<List<SysUserRole>> list(@PathVariable("userId") String userId){
+        return Result.success(userRoleService.getByUserId(userId));
     }
 }

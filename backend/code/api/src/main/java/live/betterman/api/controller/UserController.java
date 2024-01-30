@@ -24,10 +24,10 @@ public class UserController {
     @Autowired
     private SysUserService sysUserService;
 
-    @GetMapping("/list")
-    public List<SysUser> getUsers(){
-        return sysUserService.list();
-    }
+//    @GetMapping("/list")
+//    public List<SysUser> getUsers(){
+//        return sysUserService.list();
+//    }
 
     @GetMapping("/current")
     public Authentication currentUser(){
@@ -65,5 +65,10 @@ public class UserController {
     public Result<Boolean> editUser(@RequestBody SysUser user){
         boolean result = sysUserService.saveOrUpdate(user);
         return Result.success(result);
+    }
+    @GetMapping("/list")
+    public Result<List<SysUser>> list(){
+        List<SysUser> list = sysUserService.list();
+        return Result.success(list);
     }
 }
