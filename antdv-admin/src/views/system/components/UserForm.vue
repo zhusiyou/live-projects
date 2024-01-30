@@ -2,6 +2,7 @@
   <a-modal
     v-model:open="show"
     :title="title"
+    :confirm-loading="confirmLoading"
     :destroyOnClose="true"
     @ok="handleOk"
   >
@@ -12,8 +13,8 @@
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
     >
-      <a-form-item label="用户名" name="userName">
-        <a-input v-model:value="user.userName" />
+      <a-form-item label="用户名" name="username">
+        <a-input v-model:value="user.username" />
       </a-form-item>
       <a-form-item label="密码" name="password">
         <a-input type="password" v-model:value="user.password" />
@@ -22,14 +23,14 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { reactive, ref, toRaw } from "vue";
+import { reactive, ref } from "vue";
 import type { UnwrapRef } from "vue";
 import type { Rule } from "ant-design-vue/es/form";
-import { addUser } from "@/api/system/user";
+import { addUser, editUser } from "@/api/system/user";
 
 interface User {
   userId?: string;
-  userName: string;
+  username: string;
   password: string;
 }
 
@@ -49,19 +50,21 @@ const open = (model: User) => {
 const confirmLoading = ref<boolean>(false);
 
 const handleOk = () => {
-  addUser(user).then((data) => {
-    console.log(`output->data`, data);
-
-    onSubmit(() => {
-      confirmLoading.value = true;
-      console.log("values", user, toRaw(user));
-
-      setTimeout(() => {
-        show.value = false;
-        confirmLoading.value = false;
-        emit("saved", user);
-      }, 2000);
+  formRef.value
+    .validate()
+    .then(save)
+    .catch((error: any) => {
+      console.log("error", error);
     });
+};
+
+const save = () => {
+  confirmLoading.value = true;
+  (user?.userId ? editUser : addUser)(user).then((data) => {
+    console.log(`output->data`,data)
+    show.value = false;
+    confirmLoading.value = false;
+    emit("saved", user);
   });
 };
 
@@ -70,7 +73,7 @@ const labelCol = { span: 6 };
 const wrapperCol = { span: 13 };
 
 const rules: Record<string, Rule[]> = {
-  userName: [
+  username: [
     {
       required: true,
       message: "Please input 用户名",
@@ -85,14 +88,6 @@ const rules: Record<string, Rule[]> = {
       trigger: "change",
     },
   ],
-};
-const onSubmit = (resolve: () => void) => {
-  formRef.value
-    .validate()
-    .then(resolve)
-    .catch((error: any) => {
-      console.log("error", error);
-    });
 };
 
 defineExpose({

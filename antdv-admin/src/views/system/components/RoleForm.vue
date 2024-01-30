@@ -2,6 +2,7 @@
   <a-modal
     v-model:open="show"
     :title="title"
+    :confirm-loading="confirmLoading"
     :destroyOnClose="true"
     @ok="handleOk"
   >
@@ -19,9 +20,10 @@
   </a-modal>
 </template>
 <script lang="ts" setup>
-import { reactive, ref, toRaw, onMounted } from "vue";
+import { reactive, ref } from "vue";
 import type { UnwrapRef } from "vue";
 import type { Rule } from "ant-design-vue/es/form";
+import { addRole, editRole } from "@/api/system/role";
 
 interface Role {
   roleId?: string;
@@ -44,15 +46,19 @@ const open = (model: Role) => {
 const confirmLoading = ref<boolean>(false);
 
 const handleOk = () => {
-  onSubmit(() => {
-    confirmLoading.value = true;
-    console.log("values", role, toRaw(role));
-
-    setTimeout(() => {
-      show.value = false;
-      confirmLoading.value = false;
-      emit("saved", role);
-    }, 2000);
+  formRef.value
+    .validate()
+    .then(save)
+    .catch((error: any) => {
+      console.log("error", error);
+    });
+};
+const save = () => {
+  confirmLoading.value = true;
+  (role?.roleId ? editRole : addRole)(role).then(() => {
+    show.value = false;
+    confirmLoading.value = false;
+    emit("saved", role);
   });
 };
 
@@ -66,16 +72,8 @@ const rules: Record<string, Rule[]> = {
       required: true,
       message: "Please input 角色名称",
       trigger: "change",
-    }
+    },
   ],
-};
-const onSubmit = (resolve) => {
-  formRef.value
-    .validate()
-    .then(resolve)
-    .catch((error) => {
-      console.log("error", error);
-    });
 };
 
 defineExpose({

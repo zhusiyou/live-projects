@@ -7,4 +7,6 @@ export const useToken = defineStore('access-token', ()=>{
     const store = (t:string) => tokenRef.value = t
 
     return {tokenRef, token, store}
+}, {
+    persist: true,
 })
