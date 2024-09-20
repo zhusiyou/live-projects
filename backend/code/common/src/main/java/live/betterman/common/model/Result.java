@@ -20,36 +20,23 @@ public class Result<T> implements Serializable {
         this.timestamp = System.currentTimeMillis();
     }
 
-    private Result setResult(ResultCode resultCode) {
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMessage();
-        return this;
+    public static <T> Result<T> success(T data) {
+        Result<T> result = new Result<>();
+        result.setCode(ResultCode.SUCCESS.getCode());
+        result.setMsg(ResultCode.SUCCESS.getMessage());
+        result.setData(data);
+        return result;
     }
 
-    private Result setResult(ResultCode resultCode, T data) {
-        this.code = resultCode.getCode();
-        this.msg = resultCode.getMessage();
-        this.setData(data);
-        return this;
+    public static Result<Void> failure(ResultCode resultCode) {
+        Result<Void> result = new Result<>();
+        result.setCode(resultCode.getCode());
+        result.setMsg(result.getMsg());
+        return result;
     }
 
-    public static Result success() {
-        return new Result()
-                .setResult(ResultCode.SUCCESS);
-    }
-
-    public static Result success(Object data) {
-        return new Result()
-                .setResult(ResultCode.SUCCESS, data);
-    }
-
-    public static Result failure(ResultCode resultCode) {
-        return new Result()
-                .setResult(resultCode);
-    }
-
-    public static Result failure(String message) {
-        Result result = new Result();
+    public static Result<Void> error(String message) {
+        Result<Void> result = new Result<>();
         result.setCode(ResultCode.INTERNAL_SERVER_ERROR.getCode());
         result.setMsg(message);
         return result;
