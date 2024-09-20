@@ -28,15 +28,15 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static Result<Void> failure(ResultCode resultCode) {
-        Result<Void> result = new Result<>();
+    public static <T> Result<T> failure(ResultCode resultCode) {
+        Result<T> result = new Result<>();
         result.setCode(resultCode.getCode());
         result.setMsg(result.getMsg());
         return result;
     }
 
-    public static Result<Void> error(String message) {
-        Result<Void> result = new Result<>();
+    public static <T> Result<T> error(String message) {
+        Result<T> result = new Result<>();
         result.setCode(ResultCode.INTERNAL_SERVER_ERROR.getCode());
         result.setMsg(message);
         return result;
