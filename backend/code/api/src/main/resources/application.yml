@@ -23,17 +23,6 @@ spring:
           url: jdbc:mysql://localhost:3306/icode?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
           username: root
           password:
-#         老马统计报表数据库
-#        statistic:
-#          driver-class-name: oracle.jdbc.OracleDriver
-#          url: jdbc:oracle:thin:@172.16.12.134:1521/BSSKANYU17_20230912
-#          username: BSS_KANYU
-#          password: BSS_KANYU
-#        maimai:
-#          driver-class-name: oracle.jdbc.OracleDriver
-#          url: jdbc:oracle:thin:@172.16.12.134:1521/BSSBAKPDB17_20230912
-#          username: BSS_MAIMAI_BEIJING
-#          password: BSS_MAIMAI_BEIJING
       druid: # 全局druid参数，绝大部分值和默认保持一致。(现已支持的参数如下,不清楚含义不要乱设置)
         # 连接池的配置信息
         # 初始化大小，最小，最大
@@ -61,7 +50,9 @@ spring:
           noneBaseStatementAllow: true
           commentAllow: true
         # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-        connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
+        connectionProperties:
+          "druid.stat.mergeSql": true
+          "druid.stat.slowSqlMillis": 5000
       primary: master #设置默认的数据源或者数据源组,默认值即为master
       strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
   security:
