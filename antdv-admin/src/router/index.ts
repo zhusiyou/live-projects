@@ -5,18 +5,19 @@ const routes = [
         name: 'home',
         component: ()=>import('../layout/index.vue'),
         meta: {
-            title: '系统管理'
+            title: '系统管理',
+            level: 0
         },
         children: [
             {
-                path: 'user',
+                path: '/user',
                 meta: {
                     title: '用户管理'
                 },
                 component: ()=>import('@/views/system/user.vue')
             },
             {
-                path: 'role',
+                path: '/role',
                 meta: {
                     title: '角色管理'
                 },
@@ -26,9 +27,19 @@ const routes = [
     },
     {
         path: "/login",
-        component: ()=>import('@/views/Login.vue')
+        component: ()=>import('@/views/login.vue')
     }
 ]
+const pathName = '/permission'
+const title = '权限管理'
+const permission = 'permission'
+routes[0].children?.push({
+    path: `${pathName}`,
+    meta: {
+        title: `${title}`
+    },
+    component: ()=>import(`@/views/system/${permission}.vue`)
+})
 
 const router = createRouter({
     history: createWebHashHistory(),

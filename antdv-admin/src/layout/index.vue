@@ -10,6 +10,28 @@
         :open-keys="state.openKeys"
         @openChange="onOpenChange"
       >
+        <template v-for="menu in routes" :key="menu.path">
+          <a-sub-menu>
+            <template #title>
+              <span>
+                <user-outlined />
+                <span>{{ menu.meta.title }}</span>
+              </span>
+            </template>
+            <template v-for="sub in menu.children" :key="sub.path">
+              <a-menu-item>{{ sub.meta?.title }}</a-menu-item>
+            </template>
+          </a-sub-menu>
+        </template>
+      </a-menu>
+      <!-- <a-menu
+        v-model:selectedKeys="selectedKeys"
+        theme="dark"
+        mode="inline"
+        @click="menuClick"
+        :open-keys="state.openKeys"
+        @openChange="onOpenChange"
+      >
         <a-sub-menu key="system">
           <template #title>
             <span>
@@ -46,16 +68,11 @@
           <file-outlined />
           <span>File</span>
         </a-menu-item>
-      </a-menu>
+      </a-menu> -->
     </a-layout-sider>
     <a-layout :style="{ width: '100%', height: '100%' }">
       <a-layout-header style="background: #fff; padding: 0" />
       <a-layout-content style="margin: 0 16px; padding-top: 16px">
-        <!-- <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>User</a-breadcrumb-item>
-          <a-breadcrumb-item>Bill</a-breadcrumb-item>
-        </a-breadcrumb> -->
-        
         <a-tabs
           v-model:activeKey="activeKey"
           hide-add
@@ -74,40 +91,40 @@
         <div
           :style="{ background: '#fff', minHeight: '360px', height: '100%' }"
         >
-        <router-view v-slot="{ Component }" v-if="panes.length">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
+          <router-view v-slot="{ Component }" v-if="panes.length">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
         </div>
       </a-layout-content>
-      <!-- <a-layout-footer style="text-align: center">
-          Ant Design ©2018 Created by Ant UED
-        </a-layout-footer> -->
     </a-layout>
   </a-layout>
 </template>
 <script lang="ts" setup>
+import { UserOutlined } from "@ant-design/icons-vue";
+// import { Route } from "ant-design-vue/es/breadcrumb/Breadcrumb";
+import { reactive, ref, onMounted } from "vue";
 import {
-  PieChartOutlined,
-  DesktopOutlined,
-  UserOutlined,
-  TeamOutlined,
-  FileOutlined,
-} from "@ant-design/icons-vue";
-import { reactive, ref, computed, onMounted } from "vue";
-import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
+  useRouter,
+  useRoute,
+  onBeforeRouteUpdate,
+  RouteLocationNormalizedLoaded,
+} from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
-const arr = ["/user", "/role"];
-const nameArr = ["用户", "角色"];
+// 一级菜单
+const routes = router.getRoutes().filter((item) => item.meta?.level == 0);
+const collapsed = ref<boolean>(false);
+// 当前选择的高亮显示的菜单
+const selectedKeys = ref<string[]>(["1"]);
 const panes = ref<{ title: string; key: string; closable?: boolean }[]>([]);
 
-const changePanes = (to, from) => {
+const changePanes = (to: RouteLocationNormalizedLoaded) => {
   addPane(to);
   activeKey.value = to.path;
-  selectedKeys.value[0] = to.path;
+  selectedKeys.value = to.matched.map(item => item.path)
 };
 
 onMounted(() => changePanes(route));
@@ -118,7 +135,7 @@ const activeKey = ref<string>("");
 
 // const newTabIndex = ref(0);
 
-const addPane = (to) => {
+const addPane = (to: RouteLocationNormalizedLoaded) => {
   let exist = false;
   for (let i = 0; i < panes.value.length; i++) {
     const item = panes.value[i];
@@ -127,7 +144,7 @@ const addPane = (to) => {
       break;
     }
   }
-  if (!exist) {
+  if (!exist && typeof to.meta?.title === "string") {
     panes.value.push({
       title: to.meta.title,
       key: to.path,
@@ -156,18 +173,18 @@ const onEdit = (targetKey: string) => {
   remove(targetKey);
 };
 
-const collapsed = ref<boolean>(false);
-const selectedKeys = ref<string[]>(["1"]);
-
-const menuClick = ({ key }) => {
+const menuClick = ({ key }: { key: string }) => {
   router.push(key);
 };
+
+const menuKeys = router.getRoutes().map((item) => item.path);
 const state = reactive({
-  rootSubmenuKeys: ['system', 'sub1', 'sub2'],
-  openKeys: ['system'],
-})
+  rootSubmenuKeys: menuKeys,
+  openKeys: [menuKeys[0]],
+});
 const onOpenChange = (openKeys: string[]) => {
-  const latestOpenKey = openKeys.find(key => state.openKeys.indexOf(key) === -1);
+  const latestOpenKey =
+    openKeys.find((key) => state.openKeys.indexOf(key) === -1) ?? "";
   if (state.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
     state.openKeys = openKeys;
   } else {
