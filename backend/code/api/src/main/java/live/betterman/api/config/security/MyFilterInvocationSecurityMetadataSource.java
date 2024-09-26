@@ -66,7 +66,7 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
      */
     private void initConfig() {
         this.config = new HashMap<>();
-        List<SysPermission> permissions = permissionService.getAll();
+        List<SysPermission> permissions = permissionService.list();
 
         for (SysPermission permission : permissions) {
             ConfigAttribute configAttribute = new SecurityConfig(permission.getPermissionName());

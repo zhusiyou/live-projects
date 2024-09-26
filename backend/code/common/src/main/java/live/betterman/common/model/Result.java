@@ -28,11 +28,19 @@ public class Result<T> implements Serializable {
         return result;
     }
 
+    public static <T> Result<T> success() {
+        return success(null);
+    }
+
     public static <T> Result<T> failure(ResultCode resultCode) {
         Result<T> result = new Result<>();
         result.setCode(resultCode.getCode());
         result.setMsg(result.getMsg());
         return result;
+    }
+
+    public static <T> Result<T> failure() {
+        return failure(ResultCode.FAILURE);
     }
 
     public static <T> Result<T> error(String message) {
