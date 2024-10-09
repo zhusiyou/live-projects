@@ -15,6 +15,4 @@ import java.util.List;
  * @since 2024-01-10
  */
 public interface SysPermissionMapper extends BaseMapper<SysPermission> {
-    @Select("select * from sys_permission")
-    List<SysPermission> getAll();
 }

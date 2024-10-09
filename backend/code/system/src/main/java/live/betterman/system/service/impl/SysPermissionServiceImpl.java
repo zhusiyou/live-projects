@@ -19,11 +19,4 @@ import java.util.List;
  */
 @Service
 public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
-    @Autowired
-    private SysPermissionMapper permissionMapper;
-
-    @Override
-    public List<SysPermission> getAll() {
-        return permissionMapper.getAll();
-    }
 }

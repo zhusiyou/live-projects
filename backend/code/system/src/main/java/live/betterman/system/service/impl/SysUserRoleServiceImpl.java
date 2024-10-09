@@ -28,16 +28,19 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
                 .eq(SysUserRole::getUserId, userId);
         baseMapper.delete(deleteQuery);
 
-        List<SysUserRole> configs = roleIds.stream().map(item -> {
-            SysUserRole entity = new SysUserRole();
-            entity.setRoleId(item);
-            entity.setUserId(userId);
-            return entity;
-        })
-                .collect(Collectors.toList());
+        if(!roleIds.isEmpty()) {
+            List<SysUserRole> configs = roleIds.stream().map(item -> {
+                        SysUserRole entity = new SysUserRole();
+                        entity.setRoleId(item);
+                        entity.setUserId(userId);
+                        return entity;
+                    })
+                    .collect(Collectors.toList());
 
-        //TODO: zhudawei 广播？
-        return this.saveBatch(configs);
+            return this.saveBatch(configs);
+        }
+        //TODO: zhudawei 广播？强制用户退出登录？
+        return true;
     }
 
     @Override
